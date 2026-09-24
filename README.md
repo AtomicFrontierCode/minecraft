@@ -1,6 +1,7 @@
 # === minecraft bit flipper === 
 - Implements single event upsets for blocks near player using measured flip rate. 
-- Press K in game to select mode (off / full / solids only). For more information check out the Atomic Frontier video https://www.youtube.com/@atomicfrontier 
+- Press K in game to select mode (off / full / solids only).
+- For more information check out the Atomic Frontier video https://www.youtube.com/@atomicfrontier 
 
 NOTE: Developed for Minecraft version 1.12.2. It will probably crash (or at the very least, be very hard to predict upsets) if you use post-flattening versions. 
 
