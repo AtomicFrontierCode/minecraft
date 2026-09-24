@@ -25,9 +25,9 @@ NOTE: Developed for Minecraft version 1.12.2. It will probably crash (or at the 
 # === possible avenues for developement ===
 - We can probaly add some form of slider to allow user-adjusted flip rate, and another to extend how much of the world is subject to radiation.
 - To help with this, the easured flip rates in the actual experiment were:
-  > Low: 2.36689 × 10⁻⁶ flips/bit/s (warm up, takes about 10s)
-  > Medium: 2.24665 × 10⁻⁴ flips/bit/s upsets per bit per second (steady state, the one used for the existing mod)
-  > High: 1.67743 × 10⁻² flips/bit/s (chip failing, takes about 90s to get here)
+  - Low: 2.36689 × 10⁻⁶ flips/bit/s (warm up, takes about 10s)
+  - Medium: 2.24665 × 10⁻⁴ flips/bit/s upsets per bit per second (steady state, the one used for the existing mod)
+  - High: 1.67743 × 10⁻² flips/bit/s (chip failing, takes about 90s to get here)
 - Fun fact! The radiation damadge is entirely random both in type (i.e. 0->1 is as likely as 1->0) and position (no bit within a byte, or byte within the chip is any more or less likely). This makes replicating it easy.
 
 # == the source code ==
