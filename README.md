@@ -12,7 +12,12 @@
 - Developed for Minecraft version 1.12.2. It will probably crash (or at the very least, be very hard to predict upsets) if you use post-flattening versions. 
 
 # === more details === 
-- Uses a rate of 0.000224665 upsets per bit per second as measured during the standard portion of our RAM chip experiment. The full bit-by-bit replay tends to crash my computer so I had to simplify it a bit. Sorry!
+- The measured flip rates in the actual experiment were:
+  - Low: 2.36689 × 10⁻⁶ flips/bit/s (warm up, takes about 10s)
+  - Medium: 2.24665 × 10⁻⁴ flips/bit/s upsets per bit per second (steady state, the one used for the existing mod)
+  - High: 1.67743 × 10⁻² flips/bit/s (chip failing, takes about 90s to get here)
+  - Radiation damadge is entirely random both in type (i.e. 0->1 is as likely as 1->0) and position (no bits within a byte, or bytes within the chip are any more or less likely to flip). I was kinda hoping it would be more interesting and I'd be able to publish a paper on it, alas no.
+
 - Flips one of the eight ID bits of nearby blocks. Metadata (e.g., block orientation or variant) is retained. Invalid target IDs or incompatible metadata leave the original block unchanged.
 - Each player affects a 4 × 4 × 4 group of 16 × 16 × 16 blocks (i.e., 64 sub-chunks). 
 - The full mode can turn air into blocks (which is really annoying); solids-only mode attempts changes only on blocks whose material is solid.
@@ -26,14 +31,6 @@
 5. Hit installations tab then click the "open installations folder" icon (this takes me to C:\Users\James\AppData\Roaming\.minecraft).
 6. Put radiation-bit-flip-2.0.0.jar in the mods folder.
 7. You should now be able to load up a world and play. Press "K" to turn on and select the mode.
-
-# === possible avenues for developement ===
-- We can probaly add some form of slider to allow user-adjusted flip rate, and another to extend how many chunks of the world are subject to radiation.
-- The measured flip rates in the actual experiment were:
-  - Low: 2.36689 × 10⁻⁶ flips/bit/s (warm up, takes about 10s)
-  - Medium: 2.24665 × 10⁻⁴ flips/bit/s upsets per bit per second (steady state, the one used for the existing mod)
-  - High: 1.67743 × 10⁻² flips/bit/s (chip failing, takes about 90s to get here)
-  - Radiation damadge is entirely random both in type (i.e. 0->1 is as likely as 1->0) and position (no bits within a byte, or bytes within the chip are any more or less likely to flip). I was kinda hoping it would be more interesting and I'd be able to publish a paper on it, alas no.
 
 # == the source code ==
 - Located in RadiationBitFlipMod folder
