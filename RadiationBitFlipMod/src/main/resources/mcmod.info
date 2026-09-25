@@ -1,0 +1,11 @@
+[
+  {
+    "modid": "radiation-bit-flip",
+    "name": "Radiation Bit Flip Mod",
+    "description": "Flips block ID bits around the player according to measured SEU rate.",
+    "version": "2.0.0",
+    "mcversion": "1.12.2",
+    "authorList": ["Atomic Frontier (James)"],
+    "dependencies": []
+  }
+]
