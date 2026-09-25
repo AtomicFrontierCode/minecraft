@@ -7,8 +7,8 @@
 # === minecraft bit flipper === 
 - Implements single event upsets for blocks near player. 
 - Press K in game to select mode (off / full / solids only) and rate (low / medium / high / replay). The replay mode is roughly based on the actual bit flip rate during the run.
-- For more information check out https://www.youtube.com/watch?v=aUkhZalh-u4
-- Use the interactive site https://atomicfrontiercode.github.io/minecraft/ to plan bit flips.
+- For more information check out [https://www.youtube.com/watch?v=Kd5-1IXqiDQ](https://www.youtube.com/watch?v=Kd5-1IXqiDQ)
+- Use the interactive site [https://atomicfrontiercode.github.io/minecraft/](https://atomicfrontiercode.github.io/minecraft/) to plan bit flips.
 - Developed for Minecraft version 1.12.2. It will probably crash (or at the very least, be very hard to predict upsets) if you use post-flattening versions. 
 
 # === more details === 
