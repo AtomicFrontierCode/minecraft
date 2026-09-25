@@ -96,13 +96,20 @@
 
     .block-name {
       width: 100%;
-      display: block;
-      white-space: nowrap;
       overflow: hidden;
-      text-overflow: clip;
+    
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    
+      line-clamp: 2;
+    
       line-height: 1.05;
       font-size: clamp(5px, 0.72vw, 11px);
       font-weight: 400;
+    
+      overflow-wrap: normal;
+      word-break: normal;
     }
 
     .block-id {
@@ -233,11 +240,16 @@
       }
     
       .block-name {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: clip;
-        min-height: 0;
         font-size: clamp(4px, 1.45vw, 8px);
+        line-height: 1.05;
+    
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    
+        overflow: hidden;
+        overflow-wrap: normal;
+        word-break: normal;
       }
     
       .project-info {
