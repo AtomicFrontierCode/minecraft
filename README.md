@@ -1,7 +1,8 @@
 # === minecraft bit flipper === 
 - Implements single event upsets for blocks near player. 
-- Press K in game to select mode (off / full / solids only).
+- Press K in game to select mode (off / full / solids only) and rate (low / medium / high / replay). The replay mode is roughly based on the actual bit flip rate during the run.
 - For more information check out https://www.youtube.com/watch?v=aUkhZalh-u4
+- Use the interactive site https://atomicfrontiercode.github.io/minecraft/ to plan bit flips.
 - Developed for Minecraft version 1.12.2. It will probably crash (or at the very least, be very hard to predict upsets) if you use post-flattening versions. 
 
 # === more details === 
@@ -22,12 +23,11 @@
 
 # === possible avenues for developement ===
 - We can probaly add some form of slider to allow user-adjusted flip rate, and another to extend how much of the world is subject to radiation.
-- To help with this, the easured flip rates in the actual experiment were:
+- To help with this, the measured flip rates in the actual experiment were:
   - Low: 2.36689 × 10⁻⁶ flips/bit/s (warm up, takes about 10s)
   - Medium: 2.24665 × 10⁻⁴ flips/bit/s upsets per bit per second (steady state, the one used for the existing mod)
   - High: 1.67743 × 10⁻² flips/bit/s (chip failing, takes about 90s to get here)
   - Fun fact! The radiation damadge is entirely random both in type (i.e. 0->1 is as likely as 1->0) and position (no bit within a byte, or byte within the chip is any more or less likely). I was kinda hoping it would be more interesting and I'd be able to publish a paper on it, alas no.
-- In addition to the pretty cheat sheet, I also made an interactive one to help with the route plan (click one cell and then its bit-flip neighbors are highlighted, like in the post-speedrun section of the video). We should probably add something similar into the mod but I didn't have the time.
 
 # == the source code ==
 - Located in RadiationBitFlipMod folder
