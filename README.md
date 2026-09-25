@@ -2,7 +2,7 @@
 
 [![Download Mod](https://img.shields.io/badge/Download-Mod%20.jar-DBB13B?style=for-the-badge&logo=java&logoColor=black)](https://github.com/AtomicFrontierCode/minecraft/raw/main/radiation-bit-flip-2.0.0.jar)
 
-[Interactive table →](https://atomicfrontiercode.github.io/minecraft/)
+[Interactive Table of Minecraft](https://atomicfrontiercode.github.io/minecraft/)
 
 # === minecraft bit flipper === 
 - Implements single event upsets for blocks near player. 
@@ -24,16 +24,16 @@
 3. You should now be able to install forge by right clicking on the download at "...\Downloads\forge-1.12.2-14.23.5.2859-installer.jar" and opening it with Java. Click through to install client (the default).
 4. Now, open the Minecraft launcher, it should have a new installaton called "forge" with a subheading along the lines of "1.12.2-forge-14.23.5.2859".
 5. Hit installations tab then click the "open installations folder" icon (this takes me to C:\Users\James\AppData\Roaming\.minecraft).
-6. Put radiation-bit-flip-1.0.0.jar in the mods folder.
+6. Put radiation-bit-flip-2.0.0.jar in the mods folder.
 7. You should now be able to load up a world and play. Press "K" to turn on and select the mode.
 
 # === possible avenues for developement ===
-- We can probaly add some form of slider to allow user-adjusted flip rate, and another to extend how much of the world is subject to radiation.
-- To help with this, the measured flip rates in the actual experiment were:
+- We can probaly add some form of slider to allow user-adjusted flip rate, and another to extend how many chunks of the world are subject to radiation.
+- The measured flip rates in the actual experiment were:
   - Low: 2.36689 × 10⁻⁶ flips/bit/s (warm up, takes about 10s)
   - Medium: 2.24665 × 10⁻⁴ flips/bit/s upsets per bit per second (steady state, the one used for the existing mod)
   - High: 1.67743 × 10⁻² flips/bit/s (chip failing, takes about 90s to get here)
-  - Fun fact! The radiation damadge is entirely random both in type (i.e. 0->1 is as likely as 1->0) and position (no bit within a byte, or byte within the chip is any more or less likely). I was kinda hoping it would be more interesting and I'd be able to publish a paper on it, alas no.
+  - Radiation damadge is entirely random both in type (i.e. 0->1 is as likely as 1->0) and position (no bits within a byte, or bytes within the chip are any more or less likely to flip). I was kinda hoping it would be more interesting and I'd be able to publish a paper on it, alas no.
 
 # == the source code ==
 - Located in RadiationBitFlipMod folder
