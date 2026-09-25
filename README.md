@@ -1,3 +1,9 @@
+# Minecraft Radiation Bit-Flip Mod
+
+[![Download Mod](https://img.shields.io/badge/Download-Mod%20.jar-DBB13B?style=for-the-badge&logo=java&logoColor=black)](https://github.com/AtomicFrontierCode/minecraft/raw/main/radiation-bit-flip-2.0.0.jar)
+
+[Interactive table →](https://atomicfrontiercode.github.io/minecraft/)
+
 # === minecraft bit flipper === 
 - Implements single event upsets for blocks near player. 
 - Press K in game to select mode (off / full / solids only) and rate (low / medium / high / replay). The replay mode is roughly based on the actual bit flip rate during the run.
