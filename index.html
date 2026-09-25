@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Minecraft Radiation Bit-Flip Table</title>
+
+  <style>
+    :root {
+      --background: #ffffff;
+      --text: #111111;
+      --border: #000000;
+      --selected: #DBB13B;
+      --neighbor: #BFBFBF;
+      --max-table-size: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: Bahnschrift, "Arial Narrow", Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      padding: 18px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    /* ---------- Interactive 16 x 16 table ---------- */
+
+    #block-grid {
+      width: min(96vw, var(--max-table-size));
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(16, 1fr);
+      border-top: 1px solid var(--border);
+      border-left: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .cell {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      min-width: 0;
+      overflow: hidden;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      user-select: none;
+    }
+
+    .cell.valid {
+      cursor: pointer;
+    }
+
+    .cell.valid:hover {
+      outline: 2px solid #000;
+      outline-offset: -2px;
+      z-index: 2;
+    }
+
+    .cell.selected {
+      background: var(--selected);
+    }
+
+    .cell.neighbor {
+      background: var(--neighbor);
+    }
+
+    .cell-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5%;
+      text-align: center;
+    }
+
+    .block-name {
+      width: 100%;
+      min-height: 2.35em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: pre-line;
+      overflow-wrap: anywhere;
+      line-height: 1.05;
+      font-size: clamp(5px, 0.72vw, 11px);
+      font-weight: 400;
+    }
+
+    .block-id {
+      width: 100%;
+      margin-top: 4%;
+      white-space: nowrap;
+      line-height: 1;
+      font-size: clamp(4.5px, 0.60vw, 9px);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.01em;
+    }
+
+    /* ---------- Video + cheat sheet ---------- */
+
+    .media-row {
+      width: min(96vw, var(--max-table-size));
+      margin: 28px auto 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .media-card {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .video-frame {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 1px solid #000;
+      display: block;
+    }
+
+    .cheat-link {
+      display: block;
+      width: 100%;
+      border: 1px solid #000;
+      background: #fff;
+      text-decoration: none;
+    }
+
+    .cheat-link img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: contain;
+      background: #fff;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 8px;
+      }
+
+      .media-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-top: 18px;
+      }
+
+      .cell-content {
+        padding: 2%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <section id="block-grid" aria-label="Minecraft block ID bit-flip table"></section>
+
+    <section class="media-row">
+      <div class="media-card">
+        <iframe
+          class="video-frame"
+          src="https://www.youtube-nocookie.com/embed/Kd5-1IXqiDQ"
+          title="Atomic Frontier Minecraft radiation video"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <div class="media-card">
+        <a
+          class="cheat-link"
+          href="TableCheatSheet_Pretty.png"
+          target="_blank"
+          rel="noopener"
+          title="Open the high-resolution cheat sheet">
+          <img
+            src="TableCheatSheet_Pretty.png"
+            alt="Minecraft block ID cheat sheet">
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const BLOCK_NAMES = {
+  "0": "Air",
+  "1": "Stone",
+  "2": "Grass",
+  "3": "Dirt",
+  "4": "Cobblestone",
+  "5": "Planks",
+  "6": "Sapling",
+  "7": "Bedrock",
+  "8": "Water",
+  "9": "Still Water",
+  "10": "Lava",
+  "11": "Still Lava",
+  "12": "Sand",
+  "13": "Gravel",
+  "14": "Gold Ore",
+  "15": "Iron Ore",
+  "16": "Coal Ore",
+  "17": "Log",
+  "18": "Leaves",
+  "19": "Sponge",
+  "20": "Glass",
+  "21": "Lapis Ore",
+  "22": "Lapis Block",
+  "23": "Dispenser",
+  "24": "Sandstone",
+  "25": "Note Block",
+  "26": "Bed",
+  "27": "Powered Rail",
+  "28": "Detector Rail",
+  "29": "Sticky Piston",
+  "30": "Cobweb",
+  "31": "Tall Grass",
+  "32": "Dead Bush",
+  "33": "Piston",
+  "34": "Piston Head",
+  "35": "Wool",
+  "36": "Piston Extension",
+  "37": "Dandelion",
+  "38": "Flower",
+  "39": "Brown Mushroom",
+  "40": "Red Mushroom",
+  "41": "Gold Block",
+  "42": "Iron Block",
+  "43": "Double Slab",
+  "44": "Slab",
+  "45": "Bricks",
+  "46": "TNT",
+  "47": "Bookshelf",
+  "48": "Moss Stone",
+  "49": "Obsidian",
+  "50": "Torch",
+  "51": "Fire",
+  "52": "Mob Spawner",
+  "53": "Oak Stairs",
+  "54": "Chest",
+  "55": "Redstone Wire",
+  "56": "Diamond Ore",
+  "57": "Diamond Block",
+  "58": "Crafting Table",
+  "59": "Wheat Crops",
+  "60": "Farmland",
+  "61": "Furnace",
+  "62": "Lit Furnace",
+  "63": "Standing Sign",
+  "64": "Wooden Door",
+  "65": "Ladder",
+  "66": "Rail",
+  "67": "Cobblestone Stairs",
+  "68": "Wall Sign",
+  "69": "Lever",
+  "70": "Stone Pressure Plate",
+  "71": "Iron Door",
+  "72": "Wood Pressure Plate",
+  "73": "Redstone Ore",
+  "74": "Glowing Ore",
+  "75": "Unlit Redstone Torch",
+  "76": "Redstone Torch",
+  "77": "Stone Button",
+  "78": "Snow Layer",
+  "79": "Ice",
+  "80": "Snow Block",
+  "81": "Cactus",
+  "82": "Clay",
+  "83": "Sugar Cane",
+  "84": "Jukebox",
+  "85": "Fence",
+  "86": "Pumpkin",
+  "87": "Netherrack",
+  "88": "Soul Sand",
+  "89": "Glowstone",
+  "90": "Nether Portal",
+  "91": "Jack o'Lantern",
+  "92": "Cake",
+  "93": "Repeater (Off)",
+  "94": "Repeater (On)",
+  "95": "Stained Glass",
+  "96": "Trapdoor",
+  "97": "Monster Egg",
+  "98": "Stone Bricks",
+  "99": "Brown Mushroom Block",
+  "100": "Red Mushroom Block",
+  "101": "Iron Bars",
+  "102": "Glass Pane",
+  "103": "Melon",
+  "104": "Pumpkin Stem",
+  "105": "Melon Stem",
+  "106": "Vines",
+  "107": "Fence Gate",
+  "108": "Brick Stairs",
+  "109": "Stone Brick Stairs",
+  "110": "Mycelium",
+  "111": "Lily Pad",
+  "112": "Nether Bricks",
+  "113": "Nether Brick Fence",
+  "114": "Nether Brick Stairs",
+  "115": "Nether Wart",
+  "116": "Enchanting Table",
+  "117": "Brewing Stand",
+  "118": "Cauldron",
+  "119": "End Portal",
+  "120": "End Portal Frame",
+  "121": "End Stone",
+  "122": "Dragon Egg",
+  "123": "Redstone Lamp",
+  "124": "Lit Redstone Lamp",
+  "125": "Double Wood Slab",
+  "126": "Wood Slab",
+  "127": "Cocoa",
+  "128": "Sandstone Stairs",
+  "129": "Emerald Ore",
+  "130": "Ender Chest",
+  "131": "Tripwire Hook",
+  "132": "Tripwire",
+  "133": "Emerald Block",
+  "134": "Spruce Stairs",
+  "135": "Birch Stairs",
+  "136": "Jungle Stairs",
+  "137": "Command Block",
+  "138": "Beacon",
+  "139": "Cobblestone Wall",
+  "140": "Flower Pot",
+  "141": "Carrots",
+  "142": "Potatoes",
+  "143": "Wood Button",
+  "144": "Mob Head",
+  "145": "Anvil",
+  "146": "Trapped Chest",
+  "147": "Light Pressure Plate",
+  "148": "Heavy Pressure Plate",
+  "149": "Comparator (Off)",
+  "150": "Comparator (On)",
+  "151": "Daylight Sensor",
+  "152": "Redstone Block",
+  "153": "Nether Quartz Ore",
+  "154": "Hopper",
+  "155": "Quartz Block",
+  "156": "Quartz Stairs",
+  "157": "Activator Rail",
+  "158": "Dropper",
+  "159": "Stained Hardened Clay",
+  "160": "Stained Glass Pane",
+  "161": "Leaves 2",
+  "162": "Log 2",
+  "163": "Acacia Stairs",
+  "164": "Dark Oak Stairs",
+  "165": "Slime Block",
+  "166": "Barrier",
+  "167": "Iron Trapdoor",
+  "168": "Prismarine",
+  "169": "Sea Lantern",
+  "170": "Hay Bale",
+  "171": "Carpet",
+  "172": "Hardened Clay",
+  "173": "Coal Block",
+  "174": "Packed Ice",
+  "175": "Double Plant",
+  "176": "Standing Banner",
+  "177": "Wall Banner",
+  "178": "Daylight Detector Inverted",
+  "179": "Red Sandstone",
+  "180": "Red Sandstone Stairs",
+  "181": "Double Red Sandstone Slab",
+  "182": "Red Sandstone Slab",
+  "183": "Spruce Fence Gate",
+  "184": "Birch Fence Gate",
+  "185": "Jungle Fence Gate",
+  "186": "Dark Oak Fence Gate",
+  "187": "Acacia Fence Gate",
+  "188": "Spruce Fence",
+  "189": "Birch Fence",
+  "190": "Jungle Fence",
+  "191": "Dark Oak Fence",
+  "192": "Acacia Fence",
+  "193": "Spruce Door",
+  "194": "Birch Door",
+  "195": "Jungle Door",
+  "196": "Acacia Door",
+  "197": "Dark Oak Door",
+  "198": "End Rod",
+  "199": "Chorus Plant",
+  "200": "Chorus Flower",
+  "201": "Purpur Block",
+  "202": "Purpur Pillar",
+  "203": "Purpur Stairs",
+  "204": "Purpur Double Slab",
+  "205": "Purpur Slab",
+  "206": "End Bricks",
+  "207": "Beetroot Block",
+  "208": "Grass Path",
+  "209": "End Gateway",
+  "210": "Repeating Command Block",
+  "211": "Chain Command Block",
+  "212": "Frosted Ice",
+  "213": "Magma Block",
+  "214": "Nether Wart Block",
+  "215": "Red Nether Brick",
+  "216": "Bone Block",
+  "217": "Structure Void",
+  "218": "Observer",
+  "219": "White Shulker Box",
+  "220": "Orange Shulker Box",
+  "221": "Magenta Shulker Box",
+  "222": "Light Blue Shulker Box",
+  "223": "Yellow Shulker Box",
+  "224": "Lime Shulker Box",
+  "225": "Pink Shulker Box",
+  "226": "Gray Shulker Box",
+  "227": "Light Gray Shulker Box",
+  "228": "Cyan Shulker Box",
+  "229": "Purple Shulker Box",
+  "230": "Blue Shulker Box",
+  "231": "Brown Shulker Box",
+  "232": "Green Shulker Box",
+  "233": "Red Shulker Box",
+  "234": "Black Shulker Box",
+  "235": "White Glazed Terracotta",
+  "236": "Orange Glazed Terracotta",
+  "237": "Magenta Glazed Terracotta",
+  "238": "Light Blue Glazed Terracotta",
+  "239": "Yellow Glazed Terracotta",
+  "240": "Lime Glazed Terracotta",
+  "241": "Pink Glazed Terracotta",
+  "242": "Gray Glazed Terracotta",
+  "243": "Light Gray Glazed Terracotta",
+  "244": "Cyan Glazed Terracotta",
+  "245": "Purple Glazed Terracotta",
+  "246": "Blue Glazed Terracotta",
+  "247": "Brown Glazed Terracotta",
+  "248": "Green Glazed Terracotta",
+  "249": "Red Glazed Terracotta",
+  "250": "Black Glazed Terracotta",
+  "251": "Concrete",
+  "252": "Concrete Powder",
+  "255": "Structure Block"
+};
+
+    // Explicit line breaks for the labels highlighted in the reference graphic.
+    const DISPLAY_NAMES = {
+  "26": "Bed",
+  "74": "Glowing\nOre",
+  "82": "Clay",
+  "88": "Soul\nSand",
+  "90": "Nether\nPortal",
+  "91": "Jack\no'Lantern",
+  "94": "Repeater\n(On)",
+  "122": "Dragon\nEgg",
+  "218": "Observer"
+};
+
+    const SELECTED_ID = 90; // Nether Portal initially selected
+
+    let selectedId = SELECTED_ID;
+
+    function hammingDistance(a, b) {
+      let x = (a ^ b) & 0xff;
+      let count = 0;
+
+      while (x) {
+        count += x & 1;
+        x >>>= 1;
+      }
+
+      return count;
+    }
+
+    function idAsBinary(id) {
+      const bits = id.toString(2).padStart(8, "0");
+      return `${bits.slice(0, 4)} ${bits.slice(4)}`;
+    }
+
+    function displayNameFor(id) {
+      if (Object.prototype.hasOwnProperty.call(DISPLAY_NAMES, id)) {
+        return DISPLAY_NAMES[id];
+      }
+
+      return BLOCK_NAMES[id] || "";
+    }
+
+    function isValid(id) {
+      return Object.prototype.hasOwnProperty.call(BLOCK_NAMES, id);
+    }
+
+    function buildGrid() {
+      const grid = document.getElementById("block-grid");
+
+      for (let id = 0; id < 256; id++) {
+        const cell = document.createElement("div");
+        cell.className = "cell";
+        cell.dataset.id = id;
+
+        if (isValid(id)) {
+          cell.classList.add("valid");
+
+          const content = document.createElement("div");
+          content.className = "cell-content";
+
+          const name = document.createElement("div");
+          name.className = "block-name";
+          name.textContent = displayNameFor(id);
+
+          const binary = document.createElement("div");
+          binary.className = "block-id";
+          binary.textContent = `ID ${idAsBinary(id)}`;
+
+          content.appendChild(name);
+          content.appendChild(binary);
+          cell.appendChild(content);
+
+          cell.addEventListener("click", () => {
+            selectedId = id;
+            refreshHighlights();
+          });
+        }
+
+        grid.appendChild(cell);
+      }
+
+      refreshHighlights();
+    }
+
+    function refreshHighlights() {
+      const cells = document.querySelectorAll(".cell");
+
+      cells.forEach(cell => {
+        const id = Number(cell.dataset.id);
+
+        cell.classList.remove("selected", "neighbor");
+
+        if (id === selectedId) {
+          cell.classList.add("selected");
+        } else if (isValid(id) && hammingDistance(id, selectedId) === 1) {
+          cell.classList.add("neighbor");
+        }
+      });
+    }
+
+    buildGrid();
+  </script>
+</body>
+</html>
