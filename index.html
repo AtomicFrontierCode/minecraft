@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <link rel="icon" type="image/png" href="favicon.png">
+
   <title>Unperiodic Table of Minecraft</title>
 
   <style>
@@ -20,7 +22,8 @@
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       background: var(--background);
@@ -153,6 +156,65 @@
       background: #fff;
     }
 
+    /* ---------- Project description + links ---------- */
+
+    .project-info {
+      width: min(96vw, var(--max-table-size));
+      margin: 34px auto 50px;
+      text-align: center;
+    }
+
+    .project-info p {
+      max-width: 800px;
+      margin: 0 auto 20px;
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .link-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 24px 0 18px;
+    }
+
+    .project-button {
+      display: inline-block;
+      padding: 12px 20px;
+      border: 1px solid #000;
+      background: #fff;
+      color: #111;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+      transition:
+        background 0.15s ease,
+        color 0.15s ease;
+    }
+
+    .project-button:hover {
+      background: #111;
+      color: #fff;
+    }
+
+    .download-button {
+      background: #111;
+      color: #fff;
+    }
+
+    .download-button:hover {
+      background: #fff;
+      color: #111;
+    }
+
+    .small-note {
+      font-size: 13px !important;
+      opacity: 0.65;
+      margin-top: 14px !important;
+    }
+
     @media (max-width: 760px) {
       body {
         padding: 8px;
@@ -167,15 +229,31 @@
       .cell-content {
         padding: 2%;
       }
+
+      .project-info {
+        margin-top: 26px;
+      }
+
+      .project-info p {
+        font-size: 14px;
+      }
     }
   </style>
 </head>
 
 <body>
   <main class="page">
-    <section id="block-grid" aria-label="Minecraft block ID bit-flip table"></section>
 
+    <!-- Interactive Minecraft block table -->
+    <section
+      id="block-grid"
+      aria-label="Minecraft block ID bit-flip table">
+    </section>
+
+
+    <!-- Video + pretty table -->
     <section class="media-row">
+
       <div class="media-card">
         <iframe
           class="video-frame"
@@ -194,14 +272,67 @@
           target="_blank"
           rel="noopener"
           title="Open high-resolution cheat sheet">
+
           <img
             src="TableHorizontal.png"
             alt="Minecraft block ID cheat sheet">
+
         </a>
       </div>
-    </section>
-  </main>
 
+    </section>
+
+
+    <!-- Explanation + downloads -->
+    <section class="project-info">
+
+      <p>
+        This is the <strong>Unperiodic Table of Minecraft</strong>.
+        Click any block above to see every valid Minecraft block that can be
+        reached by flipping exactly one bit of its 8-bit block ID.
+      </p>
+
+      <p>
+        It was built for the Atomic Frontier experiment where we exposed
+        computer memory to radiation while playing Minecraft and used the
+        measured bit-flip rate to reproduce radiation-induced errors in game.
+      </p>
+
+      <div class="link-row">
+
+        <a
+          class="project-button download-button"
+          href="https://github.com/AtomicFrontierCode/minecraft/releases/latest"
+          target="_blank"
+          rel="noopener">
+          Download Minecraft Mod
+        </a>
+
+        <a
+          class="project-button"
+          href="https://github.com/AtomicFrontierCode/minecraft"
+          target="_blank"
+          rel="noopener">
+          View on GitHub
+        </a>
+
+        <a
+          class="project-button"
+          href="TableCheatSheet_Pretty.png"
+          target="_blank"
+          rel="noopener">
+          Open Full-Resolution Table
+        </a>
+
+      </div>
+
+      <p class="small-note">
+        The mod is designed for Minecraft Java Edition 1.12.2.
+      </p>
+
+    </section>
+
+  </main>
   <script>
     const BLOCK_NAMES = {
   "0": "Air",
@@ -460,7 +591,6 @@
   "255": "Structure Block"
 };
 
-    // Explicit line breaks for the labels highlighted in the reference graphic.
     const DISPLAY_NAMES = {
   "26": "Bed",
   "74": "Glowing\nOre",
@@ -473,7 +603,7 @@
   "218": "Observer"
 };
 
-    const SELECTED_ID = 90; // Nether Portal initially selected
+    const SELECTED_ID = 90;
 
     let selectedId = SELECTED_ID;
 
@@ -511,6 +641,7 @@
 
       for (let id = 0; id < 256; id++) {
         const cell = document.createElement("div");
+
         cell.className = "cell";
         cell.dataset.id = id;
 
@@ -526,7 +657,7 @@
 
           const binary = document.createElement("div");
           binary.className = "block-id";
-          binary.textContent = `${idAsBinary(id)}`;
+          binary.textContent = idAsBinary(id);
 
           content.appendChild(name);
           content.appendChild(binary);
@@ -554,7 +685,10 @@
 
         if (id === selectedId) {
           cell.classList.add("selected");
-        } else if (isValid(id) && hammingDistance(id, selectedId) === 1) {
+        } else if (
+          isValid(id) &&
+          hammingDistance(id, selectedId) === 1
+        ) {
           cell.classList.add("neighbor");
         }
       });
@@ -562,5 +696,6 @@
 
     buildGrid();
   </script>
+
 </body>
 </html>
