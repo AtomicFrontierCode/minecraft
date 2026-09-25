@@ -14,7 +14,7 @@
 # === more details === 
 - The measured flip rates in the actual experiment were:
   - Low: 2.36689 × 10⁻⁶ flips/bit/s (warm up, takes about 10s)
-  - Medium: 2.24665 × 10⁻⁴ flips/bit/s upsets per bit per second (steady state, the one used for the existing mod)
+  - Medium: 2.24665 × 10⁻⁴ flips/bit/s upsets per bit per second (steady state, dafault for the mod)
   - High: 1.67743 × 10⁻² flips/bit/s (chip failing, takes about 90s to get here)
   - Radiation damadge is entirely random both in type (i.e. 0->1 is as likely as 1->0) and position (no bits within a byte, or bytes within the chip are any more or less likely to flip). I was kinda hoping it would be more interesting and I'd be able to publish a paper on it, alas no.
 
