@@ -96,12 +96,10 @@
 
     .block-name {
       width: 100%;
-      min-height: 2.35em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      white-space: pre-line;
-      overflow-wrap: anywhere;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: clip;
       line-height: 1.05;
       font-size: clamp(5px, 0.72vw, 11px);
       font-weight: 400;
@@ -219,21 +217,33 @@
       body {
         padding: 8px;
       }
-
+    
       .media-row {
         grid-template-columns: 1fr;
         gap: 16px;
         margin-top: 18px;
       }
-
+    
       .cell-content {
         padding: 2%;
       }
-
+    
+      .block-id {
+        display: none;
+      }
+    
+      .block-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: clip;
+        min-height: 0;
+        font-size: clamp(4px, 1.45vw, 8px);
+      }
+    
       .project-info {
         margin-top: 26px;
       }
-
+    
       .project-info p {
         font-size: 14px;
       }
